@@ -1,0 +1,3 @@
+yacc -dv comp3.y
+flex comp3.l
+gcc y.tab.c -ll
