@@ -1,0 +1,817 @@
+Terminals unused in grammar
+
+    INVALID
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: PRGM declarations BGN statementSequence END
+
+    2 declarations: VAR ID AS type SC declarations
+    3             | %empty
+
+    4 type: INT
+
+    5 statementSequence: statement SC statementSequence
+    6                  | %empty
+
+    7 statement: assignment
+    8          | ifStatement
+    9          | whileStatement
+   10          | writeInt
+   11          | %empty
+
+   12 assignment: ID ASGN expression
+   13           | ID ASGN READ
+
+   14 ifStatement: IF expression THEN statementSequence elseClause ENDIF
+
+   15 elseClause: ELSE statementSequence
+   16           | %empty
+
+   17 whileStatement: WHL expression DO statementSequence ENDWHL
+
+   18 writeInt: WRITE expression
+
+   19 expression: simpleExpression
+   20           | simpleExpression COMP expression
+
+   21 simpleExpression: term ADD simpleExpression
+   22                 | term OR simpleExpression
+   23                 | term
+
+   24 term: factor MULT term
+   25     | factor AND term
+   26     | factor
+
+   27 factor: primary POWER factor
+   28       | primary
+
+   29 primary: ID
+   30        | NUM
+   31        | LP expression RP
+   32        | ADD primary
+   33        | NOT primary
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    NUM (258) 30
+    ID (259) 2 12 13 29
+    LP (260) 31
+    RP (261) 31
+    ASGN (262) 12 13
+    SC (263) 2 5
+    AS (264) 2
+    POWER (265) 27
+    MULT (266) 24
+    ADD (267) 21 32
+    COMP (268) 20
+    IF (269) 14
+    THEN (270) 14
+    ELSE (271) 15
+    BGN (272) 1
+    ENDIF (273) 14
+    WHL (274) 17
+    ENDWHL (275) 17
+    DO (276) 17
+    PRGM (277) 1
+    END (278) 1
+    VAR (279) 2
+    INT (280) 4
+    AND (281) 25
+    OR (282) 22
+    NOT (283) 33
+    READ (284) 13
+    WRITE (285) 18
+    INVALID (286)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (32)
+        on left: 0
+    program (33)
+        on left: 1
+        on right: 0
+    declarations (34)
+        on left: 2 3
+        on right: 1 2
+    type (35)
+        on left: 4
+        on right: 2
+    statementSequence (36)
+        on left: 5 6
+        on right: 1 5 14 15 17
+    statement (37)
+        on left: 7 8 9 10 11
+        on right: 5
+    assignment (38)
+        on left: 12 13
+        on right: 7
+    ifStatement (39)
+        on left: 14
+        on right: 8
+    elseClause (40)
+        on left: 15 16
+        on right: 14
+    whileStatement (41)
+        on left: 17
+        on right: 9
+    writeInt (42)
+        on left: 18
+        on right: 10
+    expression (43)
+        on left: 19 20
+        on right: 12 14 17 18 20 31
+    simpleExpression (44)
+        on left: 21 22 23
+        on right: 19 20 21 22
+    term (45)
+        on left: 24 25 26
+        on right: 21 22 23 24 25
+    factor (46)
+        on left: 27 28
+        on right: 24 25 26 27
+    primary (47)
+        on left: 29 30 31 32 33
+        on right: 27 28 32 33
+
+
+State 0
+
+    0 $accept: . program $end
+
+    PRGM  shift, and go to state 1
+
+    program  go to state 2
+
+
+State 1
+
+    1 program: PRGM . declarations BGN statementSequence END
+
+    VAR  shift, and go to state 3
+
+    $default  reduce using rule 3 (declarations)
+
+    declarations  go to state 4
+
+
+State 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 5
+
+
+State 3
+
+    2 declarations: VAR . ID AS type SC declarations
+
+    ID  shift, and go to state 6
+
+
+State 4
+
+    1 program: PRGM declarations . BGN statementSequence END
+
+    BGN  shift, and go to state 7
+
+
+State 5
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 6
+
+    2 declarations: VAR ID . AS type SC declarations
+
+    AS  shift, and go to state 8
+
+
+State 7
+
+    1 program: PRGM declarations BGN . statementSequence END
+
+    ID     shift, and go to state 9
+    IF     shift, and go to state 10
+    WHL    shift, and go to state 11
+    WRITE  shift, and go to state 12
+
+    SC        reduce using rule 11 (statement)
+    $default  reduce using rule 6 (statementSequence)
+
+    statementSequence  go to state 13
+    statement          go to state 14
+    assignment         go to state 15
+    ifStatement        go to state 16
+    whileStatement     go to state 17
+    writeInt           go to state 18
+
+
+State 8
+
+    2 declarations: VAR ID AS . type SC declarations
+
+    INT  shift, and go to state 19
+
+    type  go to state 20
+
+
+State 9
+
+   12 assignment: ID . ASGN expression
+   13           | ID . ASGN READ
+
+    ASGN  shift, and go to state 21
+
+
+State 10
+
+   14 ifStatement: IF . expression THEN statementSequence elseClause ENDIF
+
+    NUM  shift, and go to state 22
+    ID   shift, and go to state 23
+    LP   shift, and go to state 24
+    ADD  shift, and go to state 25
+    NOT  shift, and go to state 26
+
+    expression        go to state 27
+    simpleExpression  go to state 28
+    term              go to state 29
+    factor            go to state 30
+    primary           go to state 31
+
+
+State 11
+
+   17 whileStatement: WHL . expression DO statementSequence ENDWHL
+
+    NUM  shift, and go to state 22
+    ID   shift, and go to state 23
+    LP   shift, and go to state 24
+    ADD  shift, and go to state 25
+    NOT  shift, and go to state 26
+
+    expression        go to state 32
+    simpleExpression  go to state 28
+    term              go to state 29
+    factor            go to state 30
+    primary           go to state 31
+
+
+State 12
+
+   18 writeInt: WRITE . expression
+
+    NUM  shift, and go to state 22
+    ID   shift, and go to state 23
+    LP   shift, and go to state 24
+    ADD  shift, and go to state 25
+    NOT  shift, and go to state 26
+
+    expression        go to state 33
+    simpleExpression  go to state 28
+    term              go to state 29
+    factor            go to state 30
+    primary           go to state 31
+
+
+State 13
+
+    1 program: PRGM declarations BGN statementSequence . END
+
+    END  shift, and go to state 34
+
+
+State 14
+
+    5 statementSequence: statement . SC statementSequence
+
+    SC  shift, and go to state 35
+
+
+State 15
+
+    7 statement: assignment .
+
+    $default  reduce using rule 7 (statement)
+
+
+State 16
+
+    8 statement: ifStatement .
+
+    $default  reduce using rule 8 (statement)
+
+
+State 17
+
+    9 statement: whileStatement .
+
+    $default  reduce using rule 9 (statement)
+
+
+State 18
+
+   10 statement: writeInt .
+
+    $default  reduce using rule 10 (statement)
+
+
+State 19
+
+    4 type: INT .
+
+    $default  reduce using rule 4 (type)
+
+
+State 20
+
+    2 declarations: VAR ID AS type . SC declarations
+
+    SC  shift, and go to state 36
+
+
+State 21
+
+   12 assignment: ID ASGN . expression
+   13           | ID ASGN . READ
+
+    NUM   shift, and go to state 22
+    ID    shift, and go to state 23
+    LP    shift, and go to state 24
+    ADD   shift, and go to state 25
+    NOT   shift, and go to state 26
+    READ  shift, and go to state 37
+
+    expression        go to state 38
+    simpleExpression  go to state 28
+    term              go to state 29
+    factor            go to state 30
+    primary           go to state 31
+
+
+State 22
+
+   30 primary: NUM .
+
+    $default  reduce using rule 30 (primary)
+
+
+State 23
+
+   29 primary: ID .
+
+    $default  reduce using rule 29 (primary)
+
+
+State 24
+
+   31 primary: LP . expression RP
+
+    NUM  shift, and go to state 22
+    ID   shift, and go to state 23
+    LP   shift, and go to state 24
+    ADD  shift, and go to state 25
+    NOT  shift, and go to state 26
+
+    expression        go to state 39
+    simpleExpression  go to state 28
+    term              go to state 29
+    factor            go to state 30
+    primary           go to state 31
+
+
+State 25
+
+   32 primary: ADD . primary
+
+    NUM  shift, and go to state 22
+    ID   shift, and go to state 23
+    LP   shift, and go to state 24
+    ADD  shift, and go to state 25
+    NOT  shift, and go to state 26
+
+    primary  go to state 40
+
+
+State 26
+
+   33 primary: NOT . primary
+
+    NUM  shift, and go to state 22
+    ID   shift, and go to state 23
+    LP   shift, and go to state 24
+    ADD  shift, and go to state 25
+    NOT  shift, and go to state 26
+
+    primary  go to state 41
+
+
+State 27
+
+   14 ifStatement: IF expression . THEN statementSequence elseClause ENDIF
+
+    THEN  shift, and go to state 42
+
+
+State 28
+
+   19 expression: simpleExpression .
+   20           | simpleExpression . COMP expression
+
+    COMP  shift, and go to state 43
+
+    $default  reduce using rule 19 (expression)
+
+
+State 29
+
+   21 simpleExpression: term . ADD simpleExpression
+   22                 | term . OR simpleExpression
+   23                 | term .
+
+    ADD  shift, and go to state 44
+    OR   shift, and go to state 45
+
+    $default  reduce using rule 23 (simpleExpression)
+
+
+State 30
+
+   24 term: factor . MULT term
+   25     | factor . AND term
+   26     | factor .
+
+    MULT  shift, and go to state 46
+    AND   shift, and go to state 47
+
+    $default  reduce using rule 26 (term)
+
+
+State 31
+
+   27 factor: primary . POWER factor
+   28       | primary .
+
+    POWER  shift, and go to state 48
+
+    $default  reduce using rule 28 (factor)
+
+
+State 32
+
+   17 whileStatement: WHL expression . DO statementSequence ENDWHL
+
+    DO  shift, and go to state 49
+
+
+State 33
+
+   18 writeInt: WRITE expression .
+
+    $default  reduce using rule 18 (writeInt)
+
+
+State 34
+
+    1 program: PRGM declarations BGN statementSequence END .
+
+    $default  reduce using rule 1 (program)
+
+
+State 35
+
+    5 statementSequence: statement SC . statementSequence
+
+    ID     shift, and go to state 9
+    IF     shift, and go to state 10
+    WHL    shift, and go to state 11
+    WRITE  shift, and go to state 12
+
+    SC        reduce using rule 11 (statement)
+    $default  reduce using rule 6 (statementSequence)
+
+    statementSequence  go to state 50
+    statement          go to state 14
+    assignment         go to state 15
+    ifStatement        go to state 16
+    whileStatement     go to state 17
+    writeInt           go to state 18
+
+
+State 36
+
+    2 declarations: VAR ID AS type SC . declarations
+
+    VAR  shift, and go to state 3
+
+    $default  reduce using rule 3 (declarations)
+
+    declarations  go to state 51
+
+
+State 37
+
+   13 assignment: ID ASGN READ .
+
+    $default  reduce using rule 13 (assignment)
+
+
+State 38
+
+   12 assignment: ID ASGN expression .
+
+    $default  reduce using rule 12 (assignment)
+
+
+State 39
+
+   31 primary: LP expression . RP
+
+    RP  shift, and go to state 52
+
+
+State 40
+
+   32 primary: ADD primary .
+
+    $default  reduce using rule 32 (primary)
+
+
+State 41
+
+   33 primary: NOT primary .
+
+    $default  reduce using rule 33 (primary)
+
+
+State 42
+
+   14 ifStatement: IF expression THEN . statementSequence elseClause ENDIF
+
+    ID     shift, and go to state 9
+    IF     shift, and go to state 10
+    WHL    shift, and go to state 11
+    WRITE  shift, and go to state 12
+
+    SC        reduce using rule 11 (statement)
+    $default  reduce using rule 6 (statementSequence)
+
+    statementSequence  go to state 53
+    statement          go to state 14
+    assignment         go to state 15
+    ifStatement        go to state 16
+    whileStatement     go to state 17
+    writeInt           go to state 18
+
+
+State 43
+
+   20 expression: simpleExpression COMP . expression
+
+    NUM  shift, and go to state 22
+    ID   shift, and go to state 23
+    LP   shift, and go to state 24
+    ADD  shift, and go to state 25
+    NOT  shift, and go to state 26
+
+    expression        go to state 54
+    simpleExpression  go to state 28
+    term              go to state 29
+    factor            go to state 30
+    primary           go to state 31
+
+
+State 44
+
+   21 simpleExpression: term ADD . simpleExpression
+
+    NUM  shift, and go to state 22
+    ID   shift, and go to state 23
+    LP   shift, and go to state 24
+    ADD  shift, and go to state 25
+    NOT  shift, and go to state 26
+
+    simpleExpression  go to state 55
+    term              go to state 29
+    factor            go to state 30
+    primary           go to state 31
+
+
+State 45
+
+   22 simpleExpression: term OR . simpleExpression
+
+    NUM  shift, and go to state 22
+    ID   shift, and go to state 23
+    LP   shift, and go to state 24
+    ADD  shift, and go to state 25
+    NOT  shift, and go to state 26
+
+    simpleExpression  go to state 56
+    term              go to state 29
+    factor            go to state 30
+    primary           go to state 31
+
+
+State 46
+
+   24 term: factor MULT . term
+
+    NUM  shift, and go to state 22
+    ID   shift, and go to state 23
+    LP   shift, and go to state 24
+    ADD  shift, and go to state 25
+    NOT  shift, and go to state 26
+
+    term     go to state 57
+    factor   go to state 30
+    primary  go to state 31
+
+
+State 47
+
+   25 term: factor AND . term
+
+    NUM  shift, and go to state 22
+    ID   shift, and go to state 23
+    LP   shift, and go to state 24
+    ADD  shift, and go to state 25
+    NOT  shift, and go to state 26
+
+    term     go to state 58
+    factor   go to state 30
+    primary  go to state 31
+
+
+State 48
+
+   27 factor: primary POWER . factor
+
+    NUM  shift, and go to state 22
+    ID   shift, and go to state 23
+    LP   shift, and go to state 24
+    ADD  shift, and go to state 25
+    NOT  shift, and go to state 26
+
+    factor   go to state 59
+    primary  go to state 31
+
+
+State 49
+
+   17 whileStatement: WHL expression DO . statementSequence ENDWHL
+
+    ID     shift, and go to state 9
+    IF     shift, and go to state 10
+    WHL    shift, and go to state 11
+    WRITE  shift, and go to state 12
+
+    SC        reduce using rule 11 (statement)
+    $default  reduce using rule 6 (statementSequence)
+
+    statementSequence  go to state 60
+    statement          go to state 14
+    assignment         go to state 15
+    ifStatement        go to state 16
+    whileStatement     go to state 17
+    writeInt           go to state 18
+
+
+State 50
+
+    5 statementSequence: statement SC statementSequence .
+
+    $default  reduce using rule 5 (statementSequence)
+
+
+State 51
+
+    2 declarations: VAR ID AS type SC declarations .
+
+    $default  reduce using rule 2 (declarations)
+
+
+State 52
+
+   31 primary: LP expression RP .
+
+    $default  reduce using rule 31 (primary)
+
+
+State 53
+
+   14 ifStatement: IF expression THEN statementSequence . elseClause ENDIF
+
+    ELSE  shift, and go to state 61
+
+    $default  reduce using rule 16 (elseClause)
+
+    elseClause  go to state 62
+
+
+State 54
+
+   20 expression: simpleExpression COMP expression .
+
+    $default  reduce using rule 20 (expression)
+
+
+State 55
+
+   21 simpleExpression: term ADD simpleExpression .
+
+    $default  reduce using rule 21 (simpleExpression)
+
+
+State 56
+
+   22 simpleExpression: term OR simpleExpression .
+
+    $default  reduce using rule 22 (simpleExpression)
+
+
+State 57
+
+   24 term: factor MULT term .
+
+    $default  reduce using rule 24 (term)
+
+
+State 58
+
+   25 term: factor AND term .
+
+    $default  reduce using rule 25 (term)
+
+
+State 59
+
+   27 factor: primary POWER factor .
+
+    $default  reduce using rule 27 (factor)
+
+
+State 60
+
+   17 whileStatement: WHL expression DO statementSequence . ENDWHL
+
+    ENDWHL  shift, and go to state 63
+
+
+State 61
+
+   15 elseClause: ELSE . statementSequence
+
+    ID     shift, and go to state 9
+    IF     shift, and go to state 10
+    WHL    shift, and go to state 11
+    WRITE  shift, and go to state 12
+
+    SC        reduce using rule 11 (statement)
+    $default  reduce using rule 6 (statementSequence)
+
+    statementSequence  go to state 64
+    statement          go to state 14
+    assignment         go to state 15
+    ifStatement        go to state 16
+    whileStatement     go to state 17
+    writeInt           go to state 18
+
+
+State 62
+
+   14 ifStatement: IF expression THEN statementSequence elseClause . ENDIF
+
+    ENDIF  shift, and go to state 65
+
+
+State 63
+
+   17 whileStatement: WHL expression DO statementSequence ENDWHL .
+
+    $default  reduce using rule 17 (whileStatement)
+
+
+State 64
+
+   15 elseClause: ELSE statementSequence .
+
+    $default  reduce using rule 15 (elseClause)
+
+
+State 65
+
+   14 ifStatement: IF expression THEN statementSequence elseClause ENDIF .
+
+    $default  reduce using rule 14 (ifStatement)
