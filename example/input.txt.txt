@@ -1,0 +1,12 @@
+PROGRAM main
+INTEGER answer;
+INTEGER a, b, c, d, e, f, g, h;
+{
+  answer := 42;
+  a := b * c + d * (e + f);
+  IF a THEN 
+    IF b THEN
+      g := 0;
+    ENDIF
+  ENDIF
+}
