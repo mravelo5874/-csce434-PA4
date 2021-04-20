@@ -1,10 +1,12 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include <stdbool.h>
     #include "y.tab.h"
 
     int ln = 1; 
     int pos = 0;
+    bool printTokens = true;
 %}
 
 /* BASIC */
@@ -52,164 +54,199 @@ WRITEINT    "writeInt"
 READINT     "readInt"
 
 %%
-{ws}+       {   
-                /* printf("whitespace len: %i\n", yyleng); */ 
-                pos += yyleng;
-            }
+{ws}+ {   
+    /* printf("whitespace len: %i\n", yyleng); */
+    pos += yyleng;
+}
 
-\n+         { 
-                printf("\n");
-                ln += yyleng;
-                pos = 0;
-            }  
+\n+ {
+    printToken("NL");
+    ln += yyleng;
+    pos = 0;
+}  
 
-{comment}   {   
-                ln++;
-                pos = 0;
-            }
+{comment} {   
+    printToken("COMMENT");
+    ln++;
+    pos = 0;
+}
 
-{num}       {   
-                pos += yyleng;
-                return(NUM);
-            }
+{num} {   
+    printToken("NUM");
+    pos += yyleng;
+    return(NUM);
+}
 
-{id}        {   
-                pos += yyleng;
-                return(ID);
-            }
+{id} {   
+    printToken("ID");
+    pos += yyleng;
+    return(ID);
+}
 
-{LP}        {   
-                pos += yyleng;
-                return(LP);
-            }
+{LP} { 
+    printToken("LP");
+    pos += yyleng;
+    return(LP);
+}
 
-{RP}        {   
-                pos += yyleng;
-                return(RP);
-            }
+{RP} {   
+    printToken("RP");
+    pos += yyleng;
+    return(RP);
+}
 
-{ASGN}      {
-                pos += yyleng;
-                return(ASGN);
-            }
+{ASGN} {
+    printToken("ASGN");
+    pos += yyleng;
+    return(ASGN);
+}
 
-{SC}        {
-                pos += yyleng;
-                return(SC);
-            }
+{SC} {
+    printToken("SC");
+    pos += yyleng;
+    return(SC);
+}
 
-{AS}        {
-                pos += yyleng;
-                return(AS);
-            }
+{AS} {
+    printToken("AS");
+    pos += yyleng;
+    return(AS);
+}
 
-{POWER}     {
-                pos += yyleng;
-                return(POWER);
-            }
+{POWER} {
+    printToken("POWER");
+    pos += yyleng;
+    return(POWER);
+}
 
-{MULT}      {
-                pos += yyleng;
-                return(MULT);
-            }
+{MULT} {
+    printToken("MULT");
+    pos += yyleng;
+    return(MULT);
+}
 
-{ADD}       {
-                pos += yyleng;
-                return(ADD);
-            }
+{ADD} {
+    printToken("ADD");
+    pos += yyleng;
+    return(ADD);
+}
 
-{COMP}      {              
-                pos += yyleng;
-                return(COMP);
-            }
+{COMP} {
+    printToken("COMP");          
+    pos += yyleng;
+    return(COMP);
+}
 
-{IF}        {
-                pos += yyleng;
-                return(IF);
-            }
+{IF} {
+    printToken("IF");
+    pos += yyleng;
+    return(IF);
+}
 
-{THEN}      {
-                pos += yyleng;
-                return(THEN);
-            }
+{THEN} {
+    printToken("THEN");
+    pos += yyleng;
+    return(THEN);
+}
 
-{ELSE}      {
-                pos += yyleng;
-                return(ELSE);
-            }
+{ELSE} {
+    printToken("ELSE");
+    pos += yyleng;
+    return(ELSE);
+}
 
-{BEGIN}     {
-                pos += yyleng;
-                return(BGN);
-            }
+{BEGIN} {
+    printToken("BEGIN");
+    pos += yyleng;
+    return(BGN);
+}
 
-{ENDIF}     {
-                pos += yyleng;
-                return(ENDIF);
-            }
+{ENDIF} {
+    printToken("ENDIF");
+    pos += yyleng;
+    return(ENDIF);
+}
 
-{WHILE}     {
-                pos += yyleng;
-                return(WHL);
-            }
+{WHILE} {
+    printToken("WHILE");
+    pos += yyleng;
+    return(WHL);
+}
 
-{ENDWHILE}  {
-                pos += yyleng;
-                return(ENDWHL);
-            }
+{ENDWHILE} {
+    printToken("ENDWHILE");
+    pos += yyleng;
+    return(ENDWHL);
+}
 
-{DO}        {
-                pos += yyleng;
-                return(DO);
-            }
+{DO} {
+    printToken("DO");
+    pos += yyleng;
+    return(DO);
+}
 
-{PROGRAM}   {
-                pos += yyleng;
-                return(PRGM);
-            }
+{PROGRAM} {
+    printToken("PROGRAM");
+    pos += yyleng;
+    return(PRGM);
+}
 
-{END}       {
-                pos += yyleng;
-                return(END);
-            }
+{END} {
+    printToken("END");
+    pos += yyleng;
+    return(END);
+}
 
-{VAR}       {
-                pos += yyleng;
-                return(VAR);
-            }
+{VAR} {
+    printToken("VAR");
+    pos += yyleng;
+    return(VAR);
+}
         
-{INT}       {
-                pos += yyleng;
-                return(INT);
-            }
+{INT} {
+    printToken("INT");
+    pos += yyleng;
+    return(INT);
+}
 
-{AND}       {
-                pos += yyleng;
-                return(AND);
-            }
+{AND} {
+    printToken("AND");
+    pos += yyleng;
+    return(AND);
+}
 
-{OR}        {
-                pos += yyleng;
-                return(OR);
-            }
+{OR} {
+    printToken("OR");
+    pos += yyleng;
+    return(OR);
+}
         
-{NOT}       {
-                pos += yyleng;
-                return(NOT);
-            }
+{NOT} {
+    printToken("NOT");
+    pos += yyleng;
+    return(NOT);
+}
         
-{WRITEINT}  {
-                pos += yyleng;
-                return(WRITE);
-            }
+{WRITEINT} {
+    printToken("WRITEINT");
+    pos += yyleng;
+    return(WRITE);
+}
 
-{READINT}   {
-                pos += yyleng;
-                return(READ);
-            }
+{READINT} {
+    printToken("READINT");
+    pos += yyleng;
+    return(READ);
+}
 
-.           {
-                pos += yyleng;
-                return(INVALID);
-            }
+. {
+    printToken("INVALID");
+    pos += yyleng;
+    return(INVALID);
+}
 %%
+
+void printToken(char *t)
+{
+    if (printTokens) printf("[TOKEN] %s\n", t);
+}

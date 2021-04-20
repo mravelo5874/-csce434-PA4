@@ -12,6 +12,6 @@ begin
 
   SQRT := SQRT - 1; % subtract one SQRT is <= sqrt(N)
 
-  writeInt SQRT; 
+  writeInt SQRT;
 
 end

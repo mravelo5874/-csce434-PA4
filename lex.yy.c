@@ -508,17 +508,19 @@ char *yytext;
 #line 2 "zinc.l"
     #include <stdio.h>
     #include <stdlib.h>
+    #include <stdbool.h>
     #include "y.tab.h"
 
     int ln = 1; 
     int pos = 0;
-#line 516 "lex.yy.c"
+    bool printTokens = true;
+#line 518 "lex.yy.c"
 /* BASIC */
 /* WORDS */
 /* SYMBOLS & OPERATORS */
 /* KEYWORDS */
 /* PROCEDURES */
-#line 522 "lex.yy.c"
+#line 524 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -735,9 +737,9 @@ YY_DECL
 		}
 
 	{
-#line 54 "zinc.l"
+#line 56 "zinc.l"
 
-#line 741 "lex.yy.c"
+#line 743 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -796,269 +798,299 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 55 "zinc.l"
+#line 57 "zinc.l"
 {   
-                /* printf("whitespace len: %i\n", yyleng); */ 
-                pos += yyleng;
-            }
+    /* printf("whitespace len: %i\n", yyleng); */
+    pos += yyleng;
+}
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 60 "zinc.l"
-{ 
-                printf("\n");
-                ln += yyleng;
-                pos = 0;
-            }  
+#line 62 "zinc.l"
+{
+    printToken("NL");
+    ln += yyleng;
+    pos = 0;
+}  
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 66 "zinc.l"
+#line 68 "zinc.l"
 {   
-                ln++;
-                pos = 0;
-            }
+    printToken("COMMENT");
+    ln++;
+    pos = 0;
+}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 71 "zinc.l"
+#line 74 "zinc.l"
 {   
-                pos += yyleng;
-                return(NUM);
-            }
+    printToken("NUM");
+    pos += yyleng;
+    return(NUM);
+}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 76 "zinc.l"
+#line 80 "zinc.l"
 {   
-                pos += yyleng;
-                return(ID);
-            }
+    printToken("ID");
+    pos += yyleng;
+    return(ID);
+}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 81 "zinc.l"
-{   
-                pos += yyleng;
-                return(LP);
-            }
+#line 86 "zinc.l"
+{ 
+    printToken("LP");
+    pos += yyleng;
+    return(LP);
+}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 86 "zinc.l"
+#line 92 "zinc.l"
 {   
-                pos += yyleng;
-                return(RP);
-            }
+    printToken("RP");
+    pos += yyleng;
+    return(RP);
+}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 91 "zinc.l"
+#line 98 "zinc.l"
 {
-                pos += yyleng;
-                return(ASGN);
-            }
+    printToken("ASGN");
+    pos += yyleng;
+    return(ASGN);
+}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 96 "zinc.l"
+#line 104 "zinc.l"
 {
-                pos += yyleng;
-                return(SC);
-            }
+    printToken("SC");
+    pos += yyleng;
+    return(SC);
+}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 101 "zinc.l"
+#line 110 "zinc.l"
 {
-                pos += yyleng;
-                return(AS);
-            }
+    printToken("AS");
+    pos += yyleng;
+    return(AS);
+}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 106 "zinc.l"
+#line 116 "zinc.l"
 {
-                pos += yyleng;
-                return(POWER);
-            }
+    printToken("POWER");
+    pos += yyleng;
+    return(POWER);
+}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 111 "zinc.l"
+#line 122 "zinc.l"
 {
-                pos += yyleng;
-                return(MULT);
-            }
+    printToken("MULT");
+    pos += yyleng;
+    return(MULT);
+}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 116 "zinc.l"
+#line 128 "zinc.l"
 {
-                pos += yyleng;
-                return(ADD);
-            }
+    printToken("ADD");
+    pos += yyleng;
+    return(ADD);
+}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 121 "zinc.l"
-{              
-                pos += yyleng;
-                return(COMP);
-            }
+#line 134 "zinc.l"
+{
+    printToken("COMP");          
+    pos += yyleng;
+    return(COMP);
+}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 126 "zinc.l"
+#line 140 "zinc.l"
 {
-                pos += yyleng;
-                return(IF);
-            }
+    printToken("IF");
+    pos += yyleng;
+    return(IF);
+}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 131 "zinc.l"
+#line 146 "zinc.l"
 {
-                pos += yyleng;
-                return(THEN);
-            }
+    printToken("THEN");
+    pos += yyleng;
+    return(THEN);
+}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 136 "zinc.l"
+#line 152 "zinc.l"
 {
-                pos += yyleng;
-                return(ELSE);
-            }
+    printToken("ELSE");
+    pos += yyleng;
+    return(ELSE);
+}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 141 "zinc.l"
+#line 158 "zinc.l"
 {
-                pos += yyleng;
-                return(BGN);
-            }
+    printToken("BEGIN");
+    pos += yyleng;
+    return(BGN);
+}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 146 "zinc.l"
+#line 164 "zinc.l"
 {
-                pos += yyleng;
-                return(ENDIF);
-            }
+    printToken("ENDIF");
+    pos += yyleng;
+    return(ENDIF);
+}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 151 "zinc.l"
+#line 170 "zinc.l"
 {
-                pos += yyleng;
-                return(WHL);
-            }
+    printToken("WHILE");
+    pos += yyleng;
+    return(WHL);
+}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 156 "zinc.l"
+#line 176 "zinc.l"
 {
-                pos += yyleng;
-                return(ENDWHL);
-            }
+    printToken("ENDWHILE");
+    pos += yyleng;
+    return(ENDWHL);
+}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 161 "zinc.l"
+#line 182 "zinc.l"
 {
-                pos += yyleng;
-                return(DO);
-            }
+    printToken("DO");
+    pos += yyleng;
+    return(DO);
+}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 166 "zinc.l"
+#line 188 "zinc.l"
 {
-                pos += yyleng;
-                return(PRGM);
-            }
+    printToken("PROGRAM");
+    pos += yyleng;
+    return(PRGM);
+}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 171 "zinc.l"
+#line 194 "zinc.l"
 {
-                pos += yyleng;
-                return(END);
-            }
+    printToken("END");
+    pos += yyleng;
+    return(END);
+}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 176 "zinc.l"
+#line 200 "zinc.l"
 {
-                pos += yyleng;
-                return(VAR);
-            }
+    printToken("VAR");
+    pos += yyleng;
+    return(VAR);
+}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 181 "zinc.l"
+#line 206 "zinc.l"
 {
-                pos += yyleng;
-                return(INT);
-            }
+    printToken("INT");
+    pos += yyleng;
+    return(INT);
+}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 186 "zinc.l"
+#line 212 "zinc.l"
 {
-                pos += yyleng;
-                return(AND);
-            }
+    printToken("AND");
+    pos += yyleng;
+    return(AND);
+}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 191 "zinc.l"
+#line 218 "zinc.l"
 {
-                pos += yyleng;
-                return(OR);
-            }
+    printToken("OR");
+    pos += yyleng;
+    return(OR);
+}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 196 "zinc.l"
+#line 224 "zinc.l"
 {
-                pos += yyleng;
-                return(NOT);
-            }
+    printToken("NOT");
+    pos += yyleng;
+    return(NOT);
+}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 201 "zinc.l"
+#line 230 "zinc.l"
 {
-                pos += yyleng;
-                return(WRITE);
-            }
+    printToken("WRITEINT");
+    pos += yyleng;
+    return(WRITE);
+}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 206 "zinc.l"
+#line 236 "zinc.l"
 {
-                pos += yyleng;
-                return(READ);
-            }
+    printToken("READINT");
+    pos += yyleng;
+    return(READ);
+}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 211 "zinc.l"
+#line 242 "zinc.l"
 {
-                pos += yyleng;
-                return(INVALID);
-            }
+    printToken("INVALID");
+    pos += yyleng;
+    return(INVALID);
+}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 215 "zinc.l"
+#line 247 "zinc.l"
 ECHO;
 	YY_BREAK
-#line 1062 "lex.yy.c"
+#line 1094 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2063,5 +2095,10 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 215 "zinc.l"
+#line 247 "zinc.l"
 
+
+void printToken(char *t)
+{
+    if (printTokens) printf("[TOKEN] %s\n", t);
+}

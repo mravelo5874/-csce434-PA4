@@ -1,11 +1,13 @@
 %{
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdlib.h>
+    #include <stdio.h>
+    #include <ctype.h>
+    #include <stdlib.h>
+    #include <stdbool.h>
 
-#define yycode printf
-#define YYSTYPE int
+    #define yycode printf
+    #define YYSTYPE int
+
+    bool printStartEnd = false;
 %}
 
 // TOKENS
@@ -45,55 +47,104 @@
 %left COMP
 
 %%
-program: PRGM declarations BGN statementSequence END;
-declarations: VAR ID AS type SC declarations
-            | /* nothing */
-            ;
-type: INT;
-statementSequence: statement SC statementSequence
-                 | /* nothing */
-                 ;
-statement: assignment
-         | ifStatement
-         | whileStatement
-         | writeInt
-         | /* nothing */
-         ;
-assignment: ID ASGN expression
-          | ID ASGN READ
-          ;
-ifStatement: IF expression THEN statementSequence elseClause ENDIF;
-elseClause: ELSE statementSequence
-          | /* nothing */
-          ;
-whileStatement: WHL expression DO statementSequence ENDWHL;
-writeInt: WRITE expression;
-expression: simpleExpression
-          | simpleExpression COMP expression
-          ;
-simpleExpression: term ADD simpleExpression
-                | term OR simpleExpression
-                | term
-                ;
-term: factor MULT term
+program:
+    { printParse("program", true); }
+    PRGM declarations BGN statementSequence END
+    { printParse("program", false); }
+    ;
+
+declarations:
+    { printParse("declarations", true); }
+    VAR ID AS type SC declarations
+    { printParse("declarations", false); }
+    | /* nothing */
+    ;
+
+type:
+    INT
+    ;
+
+statementSequence:
+    { printParse("statementSequence", true); }
+    statement SC statementSequence
+    { printParse("statementSequence", true); }
+    | /* nothing */
+    ;
+
+statement:
+    assignment
+    | ifStatement
+    | whileStatement
+    | writeInt
+    | /* nothing */
+    ;
+
+assignment: 
+    ID ASGN expression
+    | ID ASGN READ
+    ;
+
+ifStatement: 
+    IF expression THEN statementSequence elseClause ENDIF
+    ;
+
+elseClause: 
+    ELSE statementSequence
+    | /* nothing */
+    ;
+
+whileStatement: 
+    WHL expression DO statementSequence ENDWHL
+    ;
+
+writeInt: 
+    WRITE expression
+    ;
+
+expression: 
+    simpleExpression
+    | simpleExpression COMP expression
+    ;
+
+simpleExpression: 
+    term ADD simpleExpression
+    | term OR simpleExpression
+    | term
+    ;
+
+term: 
+    factor MULT term
     | factor AND term
     | factor
     ;
-factor: primary POWER factor
-      | primary
-      ;
-primary: ID
-       | NUM
-       | LP expression RP
-       | ADD primary 
-       | NOT primary
-       ;
+
+factor: 
+    primary POWER factor
+    | primary
+    ;
+
+primary: 
+    ID
+    | NUM
+    | LP expression RP
+    | ADD primary 
+    | NOT primary
+    ;
 %%
 #include "lex.yy.c"
 
+void printParse(char *str, bool begin)
+{
+    if (printStartEnd)
+    {
+        if (begin) printf("[YACC] starting %s...\n", str);
+        else printf("[YACC] ending %s...\n", str);
+    }
+}
+
 int yyerror(char *s)
 {
-    printf("[ERROR]%s\n", s);
+    printf("[ERROR] %s\n", s);
 }
 
 main()
