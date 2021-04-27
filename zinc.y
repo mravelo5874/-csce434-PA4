@@ -269,7 +269,8 @@ void validateToken(int token, char* _str)
     }
     
     isValidated = true;
-    printf("<%s, %s> ", getTokenStr(currentToken), _str);
+    // used for PA3, no longer needed for PA4
+    //printf("<%s, %s> ", getTokenStr(currentToken), _str);
 }
 
 void getNextToken()
@@ -740,6 +741,11 @@ int main(int argc, char* argv[])
         FILE *fp = fopen(argv[1], "r");
         if (fp) yyin = fp;
     }
+
+    outfile = fopen("/outfile.txt", "w+");
+    fprintf(fp, "This is testing for fprintf...\n");
+    fputs("This is testing for fputs...\n", fp);
+    fclose(fp);
 
     program();
     symbolTable();
