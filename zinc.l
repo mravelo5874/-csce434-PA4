@@ -4,9 +4,27 @@
     #include <stdbool.h>
     #include "y.tab.h"
 
+    // used to keep track of current pos
     int ln = 1; 
     int pos = 0;
+
+    // print stuff to console for debugging
     bool printTokens = true;
+    bool printTree = true;
+
+    // bools used in semantic analysis
+    bool isValidated = true;
+    bool makingTable = true;
+
+    // current token and respective string
+    int currentToken = 0;
+    char* str = NULL;
+
+    // SYMBOL TABLE
+    // max symbols = 128
+    // max char length = 128
+    char symTab[128][128];
+    int symIndex = 0;
 %}
 
 /* BASIC */

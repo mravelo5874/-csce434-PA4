@@ -513,14 +513,27 @@ char *yytext;
 
     int ln = 1; 
     int pos = 0;
+    int currentToken = 0;
+
     bool printTokens = true;
-#line 518 "lex.yy.c"
+    bool isValidated = true;
+    bool makingTable = true;
+    bool printTree = true;
+
+    char* str = NULL;
+
+    // SYMBOL TABLE
+    // max symbols = 128
+    // max char length = 128
+    char symTab[128][128];
+    int symIndex = 0;
+#line 531 "lex.yy.c"
 /* BASIC */
 /* WORDS */
 /* SYMBOLS & OPERATORS */
 /* KEYWORDS */
 /* PROCEDURES */
-#line 524 "lex.yy.c"
+#line 537 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -737,9 +750,9 @@ YY_DECL
 		}
 
 	{
-#line 56 "zinc.l"
+#line 69 "zinc.l"
 
-#line 743 "lex.yy.c"
+#line 756 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -798,7 +811,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 57 "zinc.l"
+#line 70 "zinc.l"
 {   
     /* printf("whitespace len: %i\n", yyleng); */
     pos += yyleng;
@@ -807,7 +820,7 @@ YY_RULE_SETUP
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 62 "zinc.l"
+#line 75 "zinc.l"
 {
     printToken("NL");
     ln += yyleng;
@@ -817,7 +830,7 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 68 "zinc.l"
+#line 81 "zinc.l"
 {   
     printToken("COMMENT");
     ln++;
@@ -826,7 +839,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 74 "zinc.l"
+#line 87 "zinc.l"
 {   
     printToken("NUM");
     pos += yyleng;
@@ -835,7 +848,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 80 "zinc.l"
+#line 93 "zinc.l"
 {   
     printToken("ID");
     pos += yyleng;
@@ -844,7 +857,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 86 "zinc.l"
+#line 99 "zinc.l"
 { 
     printToken("LP");
     pos += yyleng;
@@ -853,7 +866,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 92 "zinc.l"
+#line 105 "zinc.l"
 {   
     printToken("RP");
     pos += yyleng;
@@ -862,7 +875,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 98 "zinc.l"
+#line 111 "zinc.l"
 {
     printToken("ASGN");
     pos += yyleng;
@@ -871,7 +884,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 104 "zinc.l"
+#line 117 "zinc.l"
 {
     printToken("SC");
     pos += yyleng;
@@ -880,7 +893,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 110 "zinc.l"
+#line 123 "zinc.l"
 {
     printToken("AS");
     pos += yyleng;
@@ -889,7 +902,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 116 "zinc.l"
+#line 129 "zinc.l"
 {
     printToken("POWER");
     pos += yyleng;
@@ -898,7 +911,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 122 "zinc.l"
+#line 135 "zinc.l"
 {
     printToken("MULT");
     pos += yyleng;
@@ -907,7 +920,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 128 "zinc.l"
+#line 141 "zinc.l"
 {
     printToken("ADD");
     pos += yyleng;
@@ -916,7 +929,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 134 "zinc.l"
+#line 147 "zinc.l"
 {
     printToken("COMP");          
     pos += yyleng;
@@ -925,7 +938,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 140 "zinc.l"
+#line 153 "zinc.l"
 {
     printToken("IF");
     pos += yyleng;
@@ -934,7 +947,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 146 "zinc.l"
+#line 159 "zinc.l"
 {
     printToken("THEN");
     pos += yyleng;
@@ -943,7 +956,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 152 "zinc.l"
+#line 165 "zinc.l"
 {
     printToken("ELSE");
     pos += yyleng;
@@ -952,7 +965,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 158 "zinc.l"
+#line 171 "zinc.l"
 {
     printToken("BEGIN");
     pos += yyleng;
@@ -961,7 +974,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 164 "zinc.l"
+#line 177 "zinc.l"
 {
     printToken("ENDIF");
     pos += yyleng;
@@ -970,7 +983,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 170 "zinc.l"
+#line 183 "zinc.l"
 {
     printToken("WHILE");
     pos += yyleng;
@@ -979,7 +992,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 176 "zinc.l"
+#line 189 "zinc.l"
 {
     printToken("ENDWHILE");
     pos += yyleng;
@@ -988,7 +1001,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 182 "zinc.l"
+#line 195 "zinc.l"
 {
     printToken("DO");
     pos += yyleng;
@@ -997,7 +1010,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 188 "zinc.l"
+#line 201 "zinc.l"
 {
     printToken("PROGRAM");
     pos += yyleng;
@@ -1006,7 +1019,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 194 "zinc.l"
+#line 207 "zinc.l"
 {
     printToken("END");
     pos += yyleng;
@@ -1015,7 +1028,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 200 "zinc.l"
+#line 213 "zinc.l"
 {
     printToken("VAR");
     pos += yyleng;
@@ -1024,7 +1037,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 206 "zinc.l"
+#line 219 "zinc.l"
 {
     printToken("INT");
     pos += yyleng;
@@ -1033,7 +1046,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 212 "zinc.l"
+#line 225 "zinc.l"
 {
     printToken("AND");
     pos += yyleng;
@@ -1042,7 +1055,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 218 "zinc.l"
+#line 231 "zinc.l"
 {
     printToken("OR");
     pos += yyleng;
@@ -1051,7 +1064,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 224 "zinc.l"
+#line 237 "zinc.l"
 {
     printToken("NOT");
     pos += yyleng;
@@ -1060,7 +1073,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 230 "zinc.l"
+#line 243 "zinc.l"
 {
     printToken("WRITEINT");
     pos += yyleng;
@@ -1069,7 +1082,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 236 "zinc.l"
+#line 249 "zinc.l"
 {
     printToken("READINT");
     pos += yyleng;
@@ -1078,7 +1091,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 242 "zinc.l"
+#line 255 "zinc.l"
 {
     printToken("INVALID");
     pos += yyleng;
@@ -1087,10 +1100,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 247 "zinc.l"
+#line 260 "zinc.l"
 ECHO;
 	YY_BREAK
-#line 1094 "lex.yy.c"
+#line 1107 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2095,7 +2108,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 247 "zinc.l"
+#line 260 "zinc.l"
 
 
 void printToken(char *t)
