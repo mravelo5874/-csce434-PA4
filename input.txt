@@ -5,6 +5,10 @@ begin
   N := readInt; 
   SQRT := 0; 
 
+  if 3 > 2 then
+    N := 3;
+  endif;
+
   % go until SQRT exceeds the square root of N
   while SQRT * SQRT <= N do 
     SQRT := SQRT + 1; 

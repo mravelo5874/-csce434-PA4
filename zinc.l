@@ -25,9 +25,6 @@
     // max char length = 128
     char symTab[128][128];
     int symIndex = 0;
-
-    // file to write to
-    FILE *outfile;
 %}
 
 /* BASIC */

@@ -8,6 +8,10 @@
     #define YYSTYPE int
 
     bool printStartEnd = false;
+    int numLabel;
+
+    // file to write output to
+    FILE *outfile;
 %}
 
 // TOKENS
@@ -322,6 +326,35 @@ void addToSymbolTable(char* symbol)
     symIndex++;
 }
 
+/* ########################### */
+/*                             */
+/*    OUTPUT CODE FUNCTIONS    */
+/*                             */
+/* ########################### */
+
+void emitToOutput(char* inst, char* n, bool tab)
+{
+    if (tab)
+    {
+        char buff[128];
+        snprintf(buff, sizeof(buff), "\t%s\t%s\n", inst, n);
+        fprintf(outfile, buff);
+    }
+    else
+    {
+        char buff[128];
+        snprintf(buff, sizeof(buff), "%s\t%s\n", inst, n);
+        fprintf(outfile, buff);
+    }
+}
+
+char* generateLabel()
+{
+    char* res = strdup("\0");
+    snprintf(res, sizeof(res), "label_%d", numLabel);
+    numLabel++;
+    return res;
+}
 
 /* ########################### */
 /*                             */
@@ -343,10 +376,14 @@ void primary()
     if (currentToken == ID)
     {
         getID();
+
+        emitToOutput("RVALUE", str, true);
     }
     else if (currentToken == NUM)
     {
         getNum();
+
+        emitToOutput("PUSH", str, true);
     }
     else if (currentToken == LP)
     {
@@ -375,10 +412,14 @@ void primary()
 
         // primary
         primary();
+
+        emitToOutput("NEG", "", true);
     }
     else if (currentToken == NOT)
     {
         validateToken(NOT, "_");
+
+        emitToOutput("NOT", "", true);
 
         // primary
         primary();
@@ -401,11 +442,14 @@ void factor()
     // primary
     primary();
 
+    bool isPower = false;
+
     // determine if next token is POWER
     getNextToken();
     if (currentToken == POWER)
     {
         validateToken(POWER, "_");
+        isPower = true;
     }
     else
     {
@@ -416,6 +460,11 @@ void factor()
     // factor
     factor();
 
+    if (isPower)
+    {
+        emitToOutput("PWR", "", true);
+    }
+
     printSyntaxTree("factor()", false);
 }
 
@@ -425,16 +474,19 @@ void term()
 
     // factor
     factor();
+    char* sym;
 
     // determine if next token is MULT or AND
     getNextToken();
     if (currentToken == MULT)
     {
         validateToken(MULT, addQuotes(str));
+        sym = str;
     }
     else if (currentToken == AND)
     {
         validateToken(AND, "_");
+        sym = str;
     }
     else
     {
@@ -445,6 +497,19 @@ void term()
     // term
     term();
 
+    if (strcmp(sym,"*") == 0)
+    {   
+        emitToOutput("MPY", "", true);
+    }
+    else if (strcmp(sym,"div") == 0)
+    {
+        emitToOutput("DIV", "", true);
+    }
+    else if (strcmp(sym,"and") == 0)
+    {
+        emitToOutput("AND", "", true);
+    }
+
     printSyntaxTree("term()", false);
 }
 
@@ -454,16 +519,19 @@ void simpleExpression()
 
     // term
     term();
+    char* sym;
 
     // determine if next token is ADD or OR
     getNextToken();
     if (currentToken == ADD)
     {
         validateToken(ADD, addQuotes(str));
+        sym = str;
     }
     else if (currentToken == OR)
     {
         validateToken(OR, "_");
+        sym = str;
     }
     else 
     {
@@ -473,6 +541,19 @@ void simpleExpression()
 
     // simpleExpression
     simpleExpression();
+
+    if (strcmp(sym,"+") == 0)
+    {
+        emitToOutput("ADD", "", true);
+    }
+    else if (strcmp(sym,"-") == 0)
+    {
+        emitToOutput("SUB", "", true);
+    }
+    else if (strcmp(sym,"or") == 0)
+    {
+        emitToOutput("OR", "", true);
+    }
 
     printSyntaxTree("simpleExpression()", false);
 }
@@ -490,9 +571,37 @@ void expression()
     {
         // COMP
         validateToken(COMP, addQuotes(str));
+        char* sym = strdup(str);
 
         // expression
         expression();
+
+        // emit correct comp to output
+        // "<>"|"<="|">="|"<"|">"|"="
+        if (strcmp(sym,"<>") == 0)
+        {
+            emitToOutput("NE", "", true);
+        }
+        else if (strcmp(sym,"<=") == 0)
+        {
+            emitToOutput("LE", "", true);
+        }
+        else if (strcmp(sym,">=") == 0)
+        {
+            emitToOutput("GE", "", true);
+        }
+        else if (strcmp(sym,"<") == 0)
+        {
+            emitToOutput("LT", "", true);
+        }
+        else if (strcmp(sym,">") == 0)
+        {
+            emitToOutput("GT", "", true);
+        }   
+        else if (strcmp(sym,"=") == 0)
+        {
+            emitToOutput("EQ", "", true);
+        }
     }
 
     printSyntaxTree("expression()", false);
@@ -508,12 +617,19 @@ void writeInt()
     // expression
     expression();
 
+    emitToOutput("PRINT", "", true);
+
     printSyntaxTree("writeInt()", false);
 }
 
 void whileStatement()
 {
     printSyntaxTree("whileStatement()", true);
+
+    char* startLabel = generateLabel();
+    char* endLabel = generateLabel();
+
+    emitToOutput("LABEL", startLabel, true);
 
     // WHILE
     validateToken(WHL, "_");
@@ -525,6 +641,8 @@ void whileStatement()
     getNextToken();
     validateToken(DO, "_");
 
+    emitToOutput("GOFALSE", endLabel, true);
+
     // statementSequence
     getNextToken();
     statementSequence();
@@ -532,6 +650,9 @@ void whileStatement()
     // ENDWHILE
     getNextToken();
     validateToken(ENDWHL, "_");
+
+    emitToOutput("GOTO", startLabel, true);
+    emitToOutput("LABEL", endLabel, true);
 
     printSyntaxTree("whileStatement()", false);
 }
@@ -556,6 +677,10 @@ void ifStatement()
 {
     printSyntaxTree("ifStatement()", true);
 
+    // generate unique label
+    char* label = generateLabel();
+    char* label2 = generateLabel();
+
     // IF
     validateToken(IF, "_");
 
@@ -566,15 +691,22 @@ void ifStatement()
     getNextToken();
     validateToken(THEN, "_");
 
+    emitToOutput("GOFALSE", label, true);
+
     // statementSequence
     getNextToken();
     statementSequence();
+
+    emitToOutput("GOTO", label2, true);
+    emitToOutput("LABEL", label, true);
 
     // elseClause
     elseClause();
 
     // ENDIF
     validateToken(ENDIF, "_");
+
+    emitToOutput("LABEL", label2, true);
 
     printSyntaxTree("ifStatement()", false);
 }
@@ -585,6 +717,7 @@ void assignment()
 
     // ID
     getID();
+    emitToOutput("LVALUE", str, true);
 
     // ASGN
     getNextToken();
@@ -602,6 +735,8 @@ void assignment()
         // expression
         expression();
     }
+
+    emitToOutput("STO", "", true);
 
     printSyntaxTree("assignment()", false);
 }
@@ -677,6 +812,9 @@ void declarations()
     getID();
     // add to symbol table
     addToSymbolTable(str);
+    char buff[128];
+    snprintf(buff, sizeof(buff), "%s:", str);
+    emitToOutput(buff, "word", true);
     
     // AS
     getNextToken();
@@ -704,12 +842,14 @@ void program()
     // PRGM
     getNextToken();
     validateToken(PRGM, "_");
+    emitToOutput("Section", ".data", false);
 
     // declarations
     declarations();
 
     // BEGIN
     validateToken(BGN, "_");
+    emitToOutput("Section", ".code", false);
 
     // finished making symbol table
     makingTable = false;
@@ -718,6 +858,7 @@ void program()
     statementSequence();
 
     validateToken(END, "_");
+    emitToOutput("HALT", "", true);
     
     printSyntaxTree("program()", false);
     printf("\nlexical analysis complete...\n");
@@ -742,13 +883,12 @@ int main(int argc, char* argv[])
         if (fp) yyin = fp;
     }
 
-    outfile = fopen("/outfile.txt", "w+");
-    fprintf(fp, "This is testing for fprintf...\n");
-    fputs("This is testing for fputs...\n", fp);
-    fclose(fp);
-
+    numLabel = 0;
+    
+    outfile = fopen("outfile.txt", "w+");
     program();
     symbolTable();
+    fclose(outfile);
 
     return 1;
 }
