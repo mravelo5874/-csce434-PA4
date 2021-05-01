@@ -462,7 +462,7 @@ void factor()
 
     if (isPower)
     {
-        emitToOutput("PWR", "", true);
+        emitToOutput("POW", "", true);
     }
 
     printSyntaxTree("factor()", false);

@@ -4,18 +4,4 @@ program
 begin 
   N := readInt; 
   SQRT := 0; 
-
-  if 3 > 2 then
-    N := 3;
-  endif;
-
-  % go until SQRT exceeds the square root of N
-  while SQRT * SQRT <= N do 
-    SQRT := SQRT + 1; 
-  endwhile ; 
-
-  SQRT := SQRT - 1; % subtract one SQRT is <= sqrt(N)
-
-  writeInt SQRT;
-
 end
