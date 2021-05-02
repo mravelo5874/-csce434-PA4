@@ -481,12 +481,12 @@ void term()
     if (currentToken == MULT)
     {
         validateToken(MULT, addQuotes(str));
-        sym = str;
+        sym = strdup(str);
     }
     else if (currentToken == AND)
     {
         validateToken(AND, "_");
-        sym = str;
+        sym = strdup(str);
     }
     else
     {
@@ -526,12 +526,12 @@ void simpleExpression()
     if (currentToken == ADD)
     {
         validateToken(ADD, addQuotes(str));
-        sym = str;
+        sym = strdup(str);
     }
     else if (currentToken == OR)
     {
         validateToken(OR, "_");
-        sym = str;
+        sym = strdup(str);
     }
     else 
     {
@@ -729,6 +729,8 @@ void assignment()
     {
         // READINT
         validateToken(READ, "_");
+
+        emitToOutput("READ", "", true);
     }
     else
     {

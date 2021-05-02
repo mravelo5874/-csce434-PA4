@@ -9,6 +9,8 @@ Section	.code
 	PUSH	0
 	STO	
 	LABEL	label_0
+	PUSH	99
+	PRINT
 	RVALUE	A
 	RVALUE	N
 	LE	

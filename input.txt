@@ -1,7 +1,13 @@
 program 
-  var N : integer; 
-  var SQRT : integer; 
+  var N : integer;
+  var A : integer;
 begin 
   N := readInt; 
-  SQRT := 0; 
+  A := 0;
+
+  while A <= N do
+    A := A + 1;
+    writeInt A;
+  endwhile;
+
 end

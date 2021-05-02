@@ -10,3 +10,20 @@ INTEGER a, b, c, d, e, f, g, h;
     ENDIF
   ENDIF
 }
+
+program 
+  var N : integer; 
+  var SQRT : integer; 
+begin 
+  N := readInt; 
+  SQRT := 0;
+
+  while SQRT * SQRT <= N do
+    SQRT := SQRT + 1;
+    writeInt SQRT;
+  endwhile;
+
+  SQRT := SQRT - 1;
+  writeInt SQRT;
+
+end
