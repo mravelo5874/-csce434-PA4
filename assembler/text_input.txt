@@ -62,3 +62,13 @@ Section .code
 	RVALUE answer
 	PRINT
 	HALT
+
+	
+error:
+
+Exception in thread "main" java.util.EmptyStackException
+        at java.base/java.util.Stack.peek(Stack.java:102)
+        at java.base/java.util.Stack.pop(Stack.java:84)
+        at StackMachineEmu.decodeAndRunInstruction(StackMachineEmu.java:124)
+        at StackMachineEmu.execute(StackMachineEmu.java:89)
+        at StackMachineEmu.main(StackMachineEmu.java:411)

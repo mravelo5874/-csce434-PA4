@@ -1,27 +1,25 @@
 Section	.data
-	N:	word
-	A:	word
-Section	.code
-	LVALUE	N
-	READ	
-	STO	
-	LVALUE	A
-	PUSH	0
-	STO	
-	LABEL	label_0
-	PUSH	99
+	flag: word
+	answer: word
+	alpha: word
+	gamma: word
+	C3PO: word
+	R2D2: word
+Section .code
+	RVALUE flag
+	GOFALSE L0
+	LVALUE answer
+	RVALUE alpha
+	PUSH 2
+	RVALUE gamma
+	MPY
+	RVALUE C3PO
+	RVALUE R2D2
+	SUB
+	DIV
+	ADD
+	STO
+	LABEL L0
+	RVALUE answer
 	PRINT
-	RVALUE	A
-	RVALUE	N
-	LE	
-	GOFALSE	label_1
-	LVALUE	A
-	RVALUE	A
-	PUSH	1
-	ADD	
-	STO	
-	RVALUE	A
-	PRINT	
-	GOTO	label_0
-	LABEL	label_1
 	HALT	
